@@ -1,26 +1,35 @@
-const cardTemplate = document.querySelector('#card-template').content;
+function createCard(
+  cardElement,
+  userID,
+  openPopupCardDelete,
+  openImagePopup,
+  likedCard
+) {
+  const cardTemplate = document.querySelector("#card-template").content;
+  const card = cardTemplate.querySelector(".card").cloneNode(true);
+  const cardTitle = card.querySelector(".card__title");
+  const cardImage = card.querySelector(".card__image");
+  const cardLikeCounter = card.querySelector(".card__like-counter");
+  let count = cardElement.likes.length;
+  const deleteButton = card.querySelector(".card__delete-button");
+  const likeButton = card.querySelector(".card__like-button");
 
-function createCard(cardElement, removeCard, openImagePopup, likedButton) {
-    const card = cardTemplate.querySelector('.card').cloneNode(true);
-    const cardTitle = card.querySelector('.card__title');
-    cardTitle.textContent = cardElement.name;
-    const cardImage = card.querySelector('.card__image');
-    cardImage.alt = cardElement.name;
-    cardImage.src = cardElement.link;
-    const deleteButton = card.querySelector('.card__delete-button');
-    deleteButton.addEventListener('click', removeCard);
-    cardImage.addEventListener('click', openImagePopup);
-    const likeButton = card.querySelector('.card__like-button');
-    likeButton.addEventListener('click', likedButton);
-    return card;
-};
+  cardTitle.textContent = cardElement.name;
+  cardImage.alt = cardElement.name;
+  cardImage.src = cardElement.link;
+  cardLikeCounter.textContent = count;
+  if (cardElement.owner._id === userID) {
+    deleteButton.addEventListener("click", () => {
+      openPopupCardDelete(cardElement, card);
+    });
+  } else {
+    deleteButton.remove();
+  }
+  cardImage.addEventListener("click", openImagePopup);
+  likeButton.addEventListener("click", (e) => {
+    likedCard(e, cardElement, cardLikeCounter);
+  });
+  return card;
+}
 
-function deleteCard(e) {
-    e.target.closest('.card').remove()
-};
-
-function likesButton (e) {
-    e.target.classList.toggle('card__like-button_is-active');
-};
-
-export { createCard, deleteCard, likesButton };
+export { createCard };
