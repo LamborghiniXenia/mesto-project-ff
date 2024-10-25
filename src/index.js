@@ -189,7 +189,7 @@ function handleCardSubmit(e) {
   };
   postNewCard(cards)
     .then((newCardData) => {
-      cardsContainer.append(
+      cardsContainer.prepend(
         createCard(
           newCardData,
           userId,
